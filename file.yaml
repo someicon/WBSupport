@@ -1,0 +1,8 @@
+- hosts: group1
+  roles:
+    - role1
+
+
+- hosts: group2, group3
+  task:
+    - debug
