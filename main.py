@@ -1,8 +1,9 @@
 import asyncio
 import os
-from aiogram import Dispatcher, Bot, F,  types
-from aiogram.filters import Command, CommandStart
+import logging
 from dotenv import load_dotenv
+from aiogram import Dispatcher, Bot
+from core.handlers.basic import router
 
 load_dotenv()
 
@@ -10,35 +11,26 @@ dp = Dispatcher()
 bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
 
 
-# Обработчик событий для бота. @dp.message() отлавливает все входящие сообщения
-@dp.message(CommandStart())
-async def echo(message: types.Message) -> None:
-    await message.answer(text=f"Тип чата {message.chat.id}\n"
-                         f"@{message.chat.username}")
+async def start_bot(bot: Bot):
+    await bot.send_message(390637335, text="Бот запущен!")
 
 
-@dp.message((F.text == "/helpme") & (F.from_user.username == "some_icon"))
-async def get_help(message: types.Message) -> None:
-    await message.answer(f"{message.chat.full_name} Вы открыли окно помощи")
+async def stop_bot(bot: Bot):
+    await bot.send_message(390637335, text="Бот остановлен!")
 
 
-@dp.message(F.text.startswith("а"))
-async def get_startwith(message: types.Message) -> None:
-    await message.answer(f"{message.chat.first_name} Ваше сообщение начинается на букву А")
+async def main():
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    dp.include_router(router=router)
+    dp.startup.register(start_bot)
+    dp.shutdown.register(stop_bot)
 
-
-@dp.message(F.photo)
-async def get_photo(message: types.Message) -> None:
-    await message.answer(f"{message.chat.username} вы отправили фото")
-
-
-async def start():
-    # main() Начинает опрашивать сервера через диспетчер и передает обновления боту
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     try:
-        asyncio.run(start())
+        asyncio.run(main())
     except KeyboardInterrupt:
         print("Бот выключен")
