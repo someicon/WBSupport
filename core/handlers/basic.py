@@ -2,13 +2,17 @@ from aiogram import Bot, F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 
+import core.keyboards.all_keyboards as kb
+
+
 router = Router()
 
 
 # Обработчик событий для бота. @dp.message() отлавливает все входящие сообщения
 @router.message(CommandStart())
 async def echo(message: Message) -> None:
-    await message.answer(f"{message.chat.full_name} Добро пожаловать в чат!")
+    await message.answer(f"{message.chat.full_name} Добро пожаловать в чат!",
+                         reply_markup=await kb.inline_items())
 
 
 @router.message((F.text == "/help") & (F.from_user.username == "some_icon"))
