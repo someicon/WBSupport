@@ -2,15 +2,22 @@ from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
                            InlineKeyboardMarkup, InlineKeyboardButton)
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-main = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="Каталог")],
-    [KeyboardButton(text="Корзина"), KeyboardButton(text="Контакты")]],
-    resize_keyboard=True,
-    input_field_placeholder="Выберите пункт меню")
+main = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Каталог", callback_data="catalog")],
+    [InlineKeyboardButton(text="Корзина", callback_data="busket"),
+     InlineKeyboardButton(text="Контакты", callback_data="contacts")],
+])
+
 
 settings = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="YouTube", url="https://www.youtube.com/watch?v=6i52YJqNziI"),
      InlineKeyboardButton(text="VK", url="https://www.youtube.com/watch?v=6i52YJqNziI")]])
+
+
+help_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Позвонить"), KeyboardButton(text="Чат тех. поддрежки")]],
+    resize_keyboard=True,
+    input_field_placeholder="Выберете пункт меню")
 
 items = ["Вешалки", "Ковры", "Наушники"]
 
