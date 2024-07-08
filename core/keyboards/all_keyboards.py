@@ -12,7 +12,7 @@ settings = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="YouTube", url="https://www.youtube.com/watch?v=6i52YJqNziI"),
      InlineKeyboardButton(text="VK", url="https://www.youtube.com/watch?v=6i52YJqNziI")]])
 
-items = ["Вешалки", "Ковры", "Наушники", "футболки"]
+items = ["Вешалки", "Ковры", "Наушники"]
 
 
 async def inline_items():
