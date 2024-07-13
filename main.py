@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 from aiogram import Dispatcher, Bot
 from core.handlers.basic import router
+from core.handlers.preturn import router2
 
 load_dotenv()
 
@@ -23,6 +24,7 @@ async def main():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     dp.include_router(router=router)
+    dp.include_router(router=router2)
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
