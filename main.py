@@ -8,9 +8,9 @@ from core.handlers.preturn import router2
 
 load_dotenv()
 
-dp = Dispatcher()
-bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
 
+bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
+dp = Dispatcher()
 
 async def start_bot(bot: Bot):
     await bot.send_message(os.getenv("ADMIN_ID"), text="Бот запущен!")
