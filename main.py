@@ -13,11 +13,11 @@ bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
 
 
 async def start_bot(bot: Bot):
-    await bot.send_message(390637335, text="Бот запущен!")
+    await bot.send_message(os.getenv("ADMIN_ID"), text="Бот запущен!")
 
 
 async def stop_bot(bot: Bot):
-    await bot.send_message(390637335, text="Бот остановлен!")
+    await bot.send_message(os.getenv("ADMIN_ID"), text="Бот остановлен!")
 
 
 async def main():

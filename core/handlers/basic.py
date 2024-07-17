@@ -10,7 +10,7 @@ from core.middlewares.middleware import TestMiddleware
 
 router = Router()
 
-router.message.middleware(TestMiddleware())
+router.message.middleware(TestMiddleware()) # outer_middleware
 
 
 class Reg(StatesGroup):
