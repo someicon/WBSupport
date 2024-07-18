@@ -35,5 +35,5 @@ async def send_echo(message: Message, state: FSMContext) -> None:
 
 @router.message()
 async def send_messag(message: Message, bot: Bot) -> None:
-    await bot.send_message(960380670, "Салам от бота")
+    await bot.send_message(message.from_user.id, "Салам от бота")
     await message.answer(message.text)
