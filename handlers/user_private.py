@@ -5,9 +5,11 @@ from aiogram.types import Message
 
 user_private_router = Router()
 
+
 @user_private_router.message(CommandStart())
 async def start_cmd(message: Message):
     await message.answer(f"Добрый день {message.from_user.full_name}. Добро пожаловать в чат")
+
 
 @user_private_router.message(Command("menu"))
 async def menu_cmd(message: Message):
@@ -24,6 +26,7 @@ async def payment_cmd(message: Message):
     await message.answer("Способы оплаты: ")
 
 
+@user_private_router.message((F.text.lower().contains('доставк')) | (F.text.lower() == "варианты доставки"))
 @user_private_router.message(Command("shipping"))
 async def shipping_cmd(message: Message):
     await message.answer("Варианты доставки: ")
