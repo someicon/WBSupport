@@ -6,7 +6,8 @@ from aiogram import types, Dispatcher, Bot
 
 # from core.handlers.basic import router
 # from core.handlers.preturn import router2
-from handlers.user_private import user_private_router
+from Handlers.user_private import user_private_router
+from Handlers.user_group import user_group_router
 from common.bot_cmds_list import private
 
 
@@ -17,6 +18,7 @@ ALLOWED_UPDATES = ["Message", "CallbackQuery"]
 
 bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
 dp = Dispatcher()
+
 
 async def start_bot(bot: Bot):
     await bot.send_message(os.getenv("ADMIN_ID"), text="Бот запущен!")
@@ -29,7 +31,7 @@ async def stop_bot(bot: Bot):
 async def main():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    dp.include_routers(user_private_router)
+    dp.include_routers(user_private_router, user_group_router)
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
@@ -37,7 +39,7 @@ async def main():
     await bot.delete_webhook(drop_pending_updates=True)
 
     # Добавление и удаление кнопки menu с командами
-    #await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats)
+    # await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats)
     await bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
 
     try:
