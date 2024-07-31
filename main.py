@@ -3,9 +3,10 @@ import os
 import logging
 from dotenv import load_dotenv
 from aiogram import types, Dispatcher, Bot
+from aiogram.enums import ParseMode
+from aiogram.client import default
 
-# from core.handlers.basic import router
-# from core.handlers.preturn import router2
+
 from Handlers.user_private import user_private_router
 from Handlers.user_group import user_group_router
 from common.bot_cmds_list import private
@@ -16,7 +17,8 @@ load_dotenv()
 ALLOWED_UPDATES = ["Message", "CallbackQuery"]
 
 
-bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
+bot = Bot(token=os.getenv("TELEGRAM_TOKEN"),
+          default=default.DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
 
