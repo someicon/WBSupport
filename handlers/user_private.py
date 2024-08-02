@@ -4,8 +4,8 @@ from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 from aiogram.utils.formatting import as_list, as_marked_section, Bold
 
-from Filters.chat_types import ChatTypeFilter
-from Keyboards import reply
+from filters.chat_types import ChatTypeFilter
+from keyboards import reply
 
 
 user_private_router = Router()

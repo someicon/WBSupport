@@ -1,11 +1,13 @@
-from string import punctuation
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-restricted_words = {'кабан', 'нворд'}
-message = "Зд!!есь напи!сано сообщени!е "
+a = os.getenv("ADMIN_ID")
+print(a.split(','))
 
+b = [int(admin_id) for admin_id in a.split(',')]
+print(b[0])
+print(b[1])
 
-def clean_text(text: str):
-    return text.translate(str.maketrans('', '', punctuation))
-
-
-print(clean_text(message))
+string = 's, t, r, i, n, g'
+print(string.split(','))

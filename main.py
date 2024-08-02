@@ -7,27 +7,37 @@ from aiogram.enums import ParseMode
 from aiogram.client import default
 
 
-from Handlers.user_private import user_private_router
-from Handlers.user_group import user_group_router
+from handlers.user_private import user_private_router
+from handlers.user_group import user_group_router
 from common.bot_cmds_list import private
 
 
 load_dotenv()
 
+TOKEN = os.getenv("TELEGRAM_TOKEN")
+ADMINS = [int(admin_id) for admin_id in os.getenv("ADMIN_ID").split(',')]
+
 ALLOWED_UPDATES = ["Message", "CallbackQuery"]
 
-
-bot = Bot(token=os.getenv("TELEGRAM_TOKEN"),
-          default=default.DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(TOKEN, default=default.DefaultBotProperties(
+    parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
 
 async def start_bot(bot: Bot):
-    await bot.send_message(os.getenv("ADMIN_ID"), text="Бот запущен!")
+    try:
+        for admin in ADMINS:
+            await bot.send_message(admin, text="Бот запущен!")
+    except :
+        ""
 
 
 async def stop_bot(bot: Bot):
-    await bot.send_message(os.getenv("ADMIN_ID"), text="Бот остановлен!")
+    try:
+        for admin in ADMINS:
+            await bot.send_message(admin, text="Бот остановлен!")
+    except:
+        ""
 
 
 async def main():

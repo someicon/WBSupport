@@ -3,13 +3,14 @@ from string import punctuation
 from aiogram import F, types, Router
 from aiogram.filters import CommandStart, Command, or_f
 
-from Filters.chat_types import ChatTypeFilter
+from filters.chat_types import ChatTypeFilter
+from common.restricted_words import restricted_words
 
 user_group_router = Router()
 user_group_router.message.filter(ChatTypeFilter(['group', 'supergroup']))  # Кастомный фильтр для роутера
 
 
-restricted_words = {'кабан', 'нворд'}
+
 
 
 def clean_text(text: str):
