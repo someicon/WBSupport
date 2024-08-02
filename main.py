@@ -6,9 +6,10 @@ from aiogram import types, Dispatcher, Bot
 from aiogram.enums import ParseMode
 from aiogram.client import default
 
+from handlers.user_private import user_private_router
+from handlers.user_group import user_group_router
+from handlers.admin_private import admin_router
 
-from Handlers.user_private import user_private_router
-from Handlers.user_group import user_group_router
 from common.bot_cmds_list import private
 
 
@@ -19,6 +20,9 @@ ALLOWED_UPDATES = ["Message", "CallbackQuery"]
 
 bot = Bot(token=os.getenv("TELEGRAM_TOKEN"),
           default=default.DefaultBotProperties(parse_mode=ParseMode.HTML))
+
+bot.my_admins_list = []
+
 dp = Dispatcher()
 
 
@@ -33,7 +37,7 @@ async def stop_bot(bot: Bot):
 async def main():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    dp.include_routers(user_private_router, user_group_router)
+    dp.include_routers(user_private_router, user_group_router, admin_router)
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 

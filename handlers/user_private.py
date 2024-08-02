@@ -1,111 +1,90 @@
-from aiogram import types, Router, F
+from aiogram import F, types, Router
 from aiogram.enums import ParseMode
-from aiogram.filters import Command, CommandStart
-from aiogram.types import Message
-from aiogram.utils.formatting import as_list, as_marked_section, Bold
+from aiogram.filters import CommandStart, Command, or_f
+from aiogram.utils.formatting import (
+    as_list,
+    as_marked_section,
+    Bold,
+)  # Italic, as_numbered_list и тд
 
-from Filters.chat_types import ChatTypeFilter
-from Keyboards import reply
+from filters.chat_types import ChatTypeFilter
 
+from keyboards.reply import get_keyboard
 
 user_private_router = Router()
-user_private_router.message.filter(ChatTypeFilter(['private']))
+user_private_router.message.filter(ChatTypeFilter(["private"]))
 
-
-# @user_private_router.message(CommandStart())
-# async def start_cmd(message: Message):
-#     await message.answer(f"Добрый день {message.from_user.full_name}. Добро пожаловать в чат",
-#                          reply_markup=reply.start_kb2.as_markup(
-#                              resize_keyboard=True,
-#                              input_field_placeholder="Start"
-#     ))
-
-
-# @user_private_router.message(CommandStart())
-# async def start_cmd(message: Message):
-#     await message.answer(f"Добрый день {message.from_user.full_name}. Добро пожаловать в чат",
-#                          reply_markup=reply.start_kb)
 
 @user_private_router.message(CommandStart())
-async def start_cmd(message: Message):
+async def start_cmd(message: types.Message):
     await message.answer(
-        "Привет, добро пожаловать в чат",
-        reply_markup=reply.get_keyboard(
+        "Привет, я виртуальный помощник",
+        reply_markup=get_keyboard(
             "Меню",
             "О магазине",
             "Варианты оплаты",
             "Варианты доставки",
-            "Отправить номер телефона",
-            placeholder="Что вас интересует ?",
-            request_contact=4,
-            size=(2, 2, 1)
-        )
+            placeholder="Что вас интересует?",
+            sizes=(2, 2)
+        ),
     )
 
 
+# @user_private_router.message(F.text.lower() == "меню")
+@user_private_router.message(or_f(Command("menu"), (F.text.lower() == "меню")))
+async def menu_cmd(message: types.Message):
+    await message.answer("Вот меню:")
 
-@user_private_router.message(F.text.lower() == "меню")
-async def menu_cmd(message: Message):
-    await message.answer("<i>Меню:</i>", reply_markup=reply.remove_kb)
 
-
-@user_private_router.message(F.text.lower() == "о нас")
+@user_private_router.message(F.text.lower() == "о магазине")
 @user_private_router.message(Command("about"))
-async def about_cmd(message: Message):
-    await message.answer("<i>О нас: </i>")
+async def about_cmd(message: types.Message):
+    await message.answer("О нас:")
 
 
-@user_private_router.message(F.text.lower() == "способы оплаты")
+@user_private_router.message(F.text.lower() == "варианты оплаты")
 @user_private_router.message(Command("payment"))
-async def payment_cmd(message: Message):
+async def payment_cmd(message: types.Message):
     text = as_marked_section(
-        Bold("Способы оплаты:"),
-        "Картой онлайн",
-        "Картой/наличными при получении",
-        "В приложении вашего банка через СБП",
-        marker="✅ "
+        Bold("Варианты оплаты:"),
+        "Картой в боте",
+        "При получении карта/кеш",
+        "В заведении",
+        marker="✅ ",
     )
     await message.answer(text.as_html())
 
 
-@user_private_router.message(F.text.lower() == "варианты доставки")
+@user_private_router.message(
+    (F.text.lower().contains("доставк")) | (F.text.lower() == "варианты доставки"))
 @user_private_router.message(Command("shipping"))
-async def shipping_cmd(message: Message):
+async def menu_cmd(message: types.Message):
     text = as_list(
         as_marked_section(
-            Bold("Варианты доставки"),
-            "Почта",
-            "Курьер по городу",
-            "СДЕК",
-            marker="✅ "
+            Bold("Варианты доставки/заказа:"),
+            "Курьер",
+            "Самовынос (сейчас прибегу заберу)",
+            "Покушаю у Вас (сейчас прибегу)",
+            marker="✅ ",
         ),
         as_marked_section(
-            Bold("Время доставки: "),
-            "Доставка осуществляется в будние дни с 10:00 до 23:00",
-            marker="🚙",
+            Bold("Нельзя:"),
+            "Почта",
+            "Голуби",
+            marker="❌ "
         ),
-        sep=f"\n{"-" * 100}\n"
+        sep="\n----------------------\n",
     )
     await message.answer(text.as_html())
 
 
-@user_private_router.message(Command("get_id"))
-async def get_id(message: types.Message):
-    await message.answer(f"{message.from_user.full_name}\nYour id: {message.from_user.id}\n")
+# @user_private_router.message(F.contact)
+# async def get_contact(message: types.Message):
+#     await message.answer(f"номер получен")
+#     await message.answer(str(message.contact))
 
 
-@user_private_router.message(Command("info"))
-async def get_info(message: types.Message):
-    await message.answer(text="Выберете пункт меню", reply_markup=reply.test_kb)
-
-
-@user_private_router.message(F.contact)
-async def get_contact(message: types.Message):
-    await message.answer("Контакт получен")
-    await message.answer(message.contact)
-
-
-@user_private_router.message(F.location)
-async def get_contact(message: types.Message):
-    await message.answer("Локация получена")
-    await message.answer(message.location)
+# @user_private_router.message(F.location)
+# async def get_location(message: types.Message):
+#     await message.answer(f"локация получена")
+#     await message.answer(str(message.location))
