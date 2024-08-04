@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from aiogram import types, Dispatcher, Bot
 from aiogram.enums import ParseMode
 from aiogram.client import default
+from aiogram.filters import Command
 
 from handlers.user_private import user_private_router
 from handlers.user_group import user_group_router
@@ -33,6 +34,11 @@ async def start_bot(bot: Bot):
 async def stop_bot(bot: Bot):
     await bot.send_message(os.getenv("ADMIN_ID"), text="Бот остановлен!")
 
+@dp.message(Command("stop"))
+async def stop_bot(message: types.Message):
+    await message.answer("Бот остановлен командой stop!")
+    await dp.stop_polling()
+    await bot.session.close()
 
 async def main():
     logging.basicConfig(level=logging.INFO,
