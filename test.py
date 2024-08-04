@@ -1,11 +1,17 @@
-from string import punctuation
+import asyncio
+from g4f.client import Client
 
-restricted_words = {'кабан', 'нворд'}
-message = "Зд!!есь напи!сано сообщени!е "
+async def gpt_answer(question):
+    client = Client()
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": f"{question}"}],
+    )
+    print(response.choices[0].message.content)
 
+async def main():
+    question = input("Введите ваш запрос: ")
+    await gpt_answer(question)
 
-def clean_text(text: str):
-    return text.translate(str.maketrans('', '', punctuation))
-
-
-print(clean_text(message))
+# Запускаем основную функцию
+asyncio.run(main())
